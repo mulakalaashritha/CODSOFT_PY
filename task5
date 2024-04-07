@@ -1,0 +1,98 @@
+class Contact:
+    def __init__(self, name, phone_number, email, address):
+        self.name = name
+        self.phone_number = phone_number
+        self.email = email
+        self.address = address
+
+class ContactManager:
+    def __init__(self):
+        self.contacts = []
+
+    def add_contact(self, contact):
+        self.contacts.append(contact)
+
+    def view_contacts(self):
+        if not self.contacts:
+            print("No contacts found.")
+        else:
+            for idx, contact in enumerate(self.contacts, start=1):
+                print(f"{idx}. {contact.name}: {contact.phone_number}")
+
+    def search_contact(self, search_term):
+        found_contacts = []
+        for contact in self.contacts:
+            if search_term.lower() in contact.name.lower() or \
+                    search_term in contact.phone_number:
+                found_contacts.append(contact)
+        return found_contacts
+
+    def update_contact(self, contact_index, new_contact):
+        self.contacts[contact_index] = new_contact
+
+    def delete_contact(self, contact_index):
+        del self.contacts[contact_index]
+
+
+def get_contact_info():
+    name = input("Enter name: ")
+    phone_number = input("Enter phone number: ")
+    email = input("Enter email: ")
+    address = input("Enter address: ")
+    return Contact(name, phone_number, email, address)
+
+
+def main():
+    contact_manager = ContactManager()
+
+    while True:
+        print("\nContact Management System")
+        print("1. Add Contact")
+        print("2. View Contact List")
+        print("3. Search Contact")
+        print("4. Update Contact")
+        print("5. Delete Contact")
+        print("6. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            new_contact = get_contact_info()
+            contact_manager.add_contact(new_contact)
+            print("Contact added successfully!")
+        elif choice == '2':
+            print("\nContact List:")
+            contact_manager.view_contacts()
+        elif choice == '3':
+            search_term = input("Enter name or phone number to search: ")
+            found_contacts = contact_manager.search_contact(search_term)
+            if found_contacts:
+                print("\nSearch Results:")
+                for contact in found_contacts:
+                    print(f"Name: {contact.name}, Phone: {contact.phone_number}")
+            else:
+                print("No matching contacts found.")
+        elif choice == '4':
+            contact_index = int(input("Enter the index of the contact to update: ")) - 1
+            if 0 <= contact_index < len(contact_manager.contacts):
+                new_contact = get_contact_info()
+                contact_manager.update_contact(contact_index, new_contact)
+                print("Contact updated successfully!")
+            else:
+                print("Invalid contact index.")
+        elif choice == '5':
+            contact_index = int(input("Enter the index of the contact to delete: ")) - 1
+            if 0 <= contact_index < len(contact_manager.contacts):
+                contact_manager.delete_contact(contact_index)
+                print("Contact deleted successfully!")
+            else:
+                print("Invalid contact index.")
+        elif choice == '6':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
